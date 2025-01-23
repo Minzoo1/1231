@@ -12,7 +12,6 @@ const App = () => {
   return (
     <Router>
       <GlobalStyle />
-
       <Routes>
         {/* 메인 페이지 */}
         <Route path="/" element={<MainPage />} />

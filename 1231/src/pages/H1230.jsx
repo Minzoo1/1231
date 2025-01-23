@@ -1,143 +1,110 @@
-import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
-const PageContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #1a1a2e;
-  overflow: hidden;
+import pixelBackground from "../assets/pixel-background.png";
+
+// 애니메이션 정의
+const fadeIn = keyframes`
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+`;
+
+const moveRight = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(150px); }
+`;
+
+const giveBouquet = keyframes`
+  0% { transform: translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-20px); opacity: 1; }
+`;
+
+// 컴포넌트 스타일
+const Background = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url(${pixelBackground}) repeat;
+  background-size: cover;
+  opacity: 0; /* 초기 상태에서 숨김 */
+  animation: ${fadeIn} 2s ease-in forwards; /* 페이드인 애니메이션 */
+  animation-delay: 0s; /* 애니메이션 시작 시간 설정 */
+`;
+
+const MaleCharacter = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  width: 152px;
+  height: 152px;
+  background: url("/src/assets/Minzo.png") no-repeat;
+  background-size: cover;
+  opacity: 0; /* 초기 상태에서 숨김 */
+  animation: ${moveRight} 4s linear forwards, ${fadeIn} 2s ease-in forwards;
+  animation-delay: 2s; /* 배경 이후 등장 */
+`;
+
+const FemaleCharacter = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 400px;
+  width: 152px;
+  height: 152px;
+  background: url("/src/assets/Minzomi.png") no-repeat;
+  background-size: cover;
+  opacity: 0; /* 초기 상태에서 숨김 */
+  animation: ${fadeIn} 2s ease-in forwards;
+  animation-delay: 6s; /* 남자 캐릭터 이후 등장 */
+`;
+
+const Bouquet = styled.div`
+  position: absolute;
+  bottom: 80px;
+  left: 280px;
+  width: 152px;
+  height: 152px;
+  background: url("/src/assets/Bou.png") no-repeat;
+  background-size: cover;
+  opacity: 0; /* 초기 상태에서 숨김 */
+  animation: ${giveBouquet} 2s ease-in forwards;
+  animation-delay: 8s; /* 여자 캐릭터 이후 등장 */
+`;
+
+const SpeechBubble = styled.div`
+  position: absolute;
+  bottom: 200px;
+  left: 0;
+  width: 120px;
+  background: white;
+  border: 1px solid black;
+  padding: 5px;
+  font-size: 12px;
+  text-align: center;
+  opacity: 0; /* 초기 상태에서 숨김 */
+  animation: ${fadeIn} 2s ease-in forwards;
+  animation-delay: 10s; /* 꽃다발 이후 등장 */
+`;
+
+const Scene = styled.div`
   position: relative;
+  width: 700px;
+  height: 500px;
+  background-color: #f0f0f0;
+  border: 2px solid #000;
+  overflow: hidden;
+  image-rendering: pixelated;
 `;
 
-const rainAnimation = keyframes`
-  0% {
-    transform: translateY(-100vh);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-`;
-
-const RainDrop = styled.div`
-  position: absolute;
-  width: 2px;
-  height: 15px;
-  background-color: rgba(255, 255, 255, 0.5);
-  animation: ${rainAnimation} 1s linear infinite;
-`;
-
-const windAnimation = keyframes`
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-`;
-
-const WindLine = styled.div`
-  position: absolute;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
-  animation: ${windAnimation} 3s linear infinite;
-`;
-
-const flyAnimation = keyframes`
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(100vw, -100vh) rotate(720deg);
-    opacity: 0;
-  }
-`;
-
-const FlyingTextSpan = styled.span`
-  position: absolute;
-  font-size: 1.5rem;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  animation: ${flyAnimation} 3s linear forwards;
-  white-space: nowrap;
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  z-index: 10;
-`;
-
-function H1230() {
-  const [flyingTexts, setFlyingTexts] = useState([]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFlyingTexts((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-        },
-      ]);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setFlyingTexts((prev) => prev.slice(1));
-    }, 5000);
-
-    return () => clearTimeout(timeout);
-  }, [flyingTexts]);
-
-  const raindrops = Array.from({ length: 100 }, (_, i) => ({
-    left: `${Math.random() * 100}%`,
-    animationDelay: `${Math.random() * 2}s`,
-  }));
-
-  const windLines = Array.from({ length: 20 }, (_, i) => ({
-    width: `${Math.random() * 50 + 50}%`,
-    top: `${Math.random() * 100}%`,
-    animationDelay: `${Math.random() * 3}s`,
-  }));
-
+export default function AnimationScene() {
   return (
-    <PageContainer>
-      {raindrops.map((drop, index) => (
-        <RainDrop
-          key={`rain-${index}`}
-          style={{ left: drop.left, animationDelay: drop.animationDelay }}
-        />
-      ))}
-      {windLines.map((line, index) => (
-        <WindLine
-          key={`wind-${index}`}
-          style={{
-            width: line.width,
-            top: line.top,
-            animationDelay: line.animationDelay,
-          }}
-        />
-      ))}
-      {flyingTexts.map((text) => (
-        <FlyingTextSpan key={text.id} style={{ left: text.x, top: text.y }}>
-          미구현
-        </FlyingTextSpan>
-      ))}
-      <Title>
-        밖에는 비바람이 몰아쳐 진행할수없습니다. (미구현) 12/30일 정시오픈예정!
-      </Title>
-    </PageContainer>
+    <Scene>
+      <Background />
+      <MaleCharacter />
+      <FemaleCharacter />
+      <Bouquet />
+      <SpeechBubble>이 꽃을 받아주시요 민쪼미양..</SpeechBubble>
+    </Scene>
   );
 }
-
-export default H1230;
-("");
