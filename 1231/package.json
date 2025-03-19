@@ -15,8 +15,11 @@
     "gsap": "^3.12.5",
     "lottie-react": "^2.4.0",
     "react": "^18.3.1",
+    "react-confetti": "^6.4.0",
     "react-dom": "^18.3.1",
+    "react-lottie-player": "^2.1.0",
     "react-router-dom": "^7.0.2",
+    "react-use": "^17.6.0",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
